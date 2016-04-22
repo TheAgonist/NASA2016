@@ -1,0 +1,60 @@
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import java.io.*;
+import java.net.UnknownHostException;
+
+public
+class KnockKnockClient {
+    public
+            static
+    void
+            main(String[] arstring) {
+        try {
+            sendData();
+            readSocket();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+	private static void sendData() throws IOException, UnknownHostException {
+		SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+		SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 9999);
+
+		InputStream inputstream = System.in;
+		InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+		BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+
+		OutputStream outputstream = sslsocket.getOutputStream();
+		OutputStreamWriter outputstreamwriter = new OutputStreamWriter(outputstream);
+		BufferedWriter bufferedWriter = new BufferedWriter(outputstreamwriter);
+
+		String string = null;
+		while ((string = bufferedreader.readLine()) != null) {
+			bufferedWriter.write(string + '\n');
+			bufferedWriter.flush();
+		}
+	}
+	
+	private static void readSocket() throws IOException {
+		SSLServerSocketFactory sslserversocketfactory =
+		        (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+		SSLServerSocket sslserversocket =
+		        (SSLServerSocket) sslserversocketfactory.createServerSocket(9999);
+		SSLSocket sslsocket = (SSLSocket) sslserversocket.accept();
+
+		InputStream inputstream = sslsocket.getInputStream();
+		InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+		BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+
+		String string = null;
+		while ((string = bufferedreader.readLine()) != null) {
+		    System.out.println(string);
+		    System.out.flush();
+		}
+	}
+}
+  

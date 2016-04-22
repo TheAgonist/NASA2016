@@ -1,0 +1,65 @@
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.UnknownHostException;
+
+public
+class KnockKnockServer {
+    public
+            static
+    void
+            main(String[] arstring) {
+        try {
+            readSocket();
+            sendData();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+	private static void readSocket() throws IOException {
+		SSLServerSocketFactory sslserversocketfactory =
+		        (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+		SSLServerSocket sslserversocket =
+		        (SSLServerSocket) sslserversocketfactory.createServerSocket(9999);
+		SSLSocket sslsocket = (SSLSocket) sslserversocket.accept();
+
+		InputStream inputstream = sslsocket.getInputStream();
+		InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+		BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+
+		String string = null;
+		while ((string = bufferedreader.readLine()) != null) {
+		    System.out.println(string);
+		    System.out.flush();
+		}
+	}
+	
+	private static void sendData() throws IOException, UnknownHostException {
+		SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+		SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 9999);
+
+		InputStream inputstream = System.in;
+		InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+		BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+
+		OutputStream outputstream = sslsocket.getOutputStream();
+		OutputStreamWriter outputstreamwriter = new OutputStreamWriter(outputstream);
+		BufferedWriter bufferedWriter = new BufferedWriter(outputstreamwriter);
+
+		String string = null;
+		while ((string = bufferedreader.readLine()) != null) {
+			bufferedWriter.write(string + '\n');
+			bufferedWriter.flush();
+		}
+	}
+}

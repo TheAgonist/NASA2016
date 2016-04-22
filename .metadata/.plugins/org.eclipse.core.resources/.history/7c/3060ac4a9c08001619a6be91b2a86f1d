@@ -1,0 +1,47 @@
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+public class KnockKnockServer {
+    public static void
+            main(String[] arstring) {
+        try {
+            SSLSocket sslsocket = createServerSocket();
+            BufferedReader bufferedreader = readClientData(sslsocket);
+            writeToConsole(bufferedreader);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+	private static BufferedReader readClientData(SSLSocket sslsocket)
+			throws IOException {
+		InputStream inputstream = sslsocket.getInputStream();
+		InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+		BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+		return bufferedreader;
+	}
+
+	private static SSLSocket createServerSocket() throws IOException {
+		SSLServerSocketFactory sslserversocketfactory =
+		        (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+		SSLServerSocket sslserversocket =
+		        (SSLServerSocket) sslserversocketfactory.createServerSocket(9999);
+		SSLSocket sslsocket = (SSLSocket) sslserversocket.accept();
+		return sslsocket;
+	}
+
+	private static void writeToConsole(BufferedReader bufferedreader)
+			throws IOException {
+		String string = null;
+		while ((string = bufferedreader.readLine()) != null) {
+		    System.out.println(string);
+		    System.out.flush();
+		}
+	}
+}

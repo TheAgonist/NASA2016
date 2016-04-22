@@ -1,0 +1,62 @@
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import java.io.*;
+
+public
+class KnockKnockClient {
+	
+	private static void readConsole(SSLSocket sslsocket){
+		try {
+			InputStream inputStreamConsole = System.in;
+	        InputStreamReader inputStreamReaderConsole = new InputStreamReader(inputStreamConsole);
+	        BufferedReader bufferedReaderConsole = new BufferedReader(inputStreamReaderConsole);
+	        OutputStream outputstream;
+			outputstream = sslsocket.getOutputStream();
+			OutputStreamWriter outputstreamwriter = new OutputStreamWriter(outputstream);
+	        BufferedWriter bufferedwriter = new BufferedWriter(outputstreamwriter);
+	        String string = null;
+	        while ((string = bufferedReaderConsole.readLine()) != null) {
+		        System.out.println(string);
+	            bufferedwriter.write(string + '\n');
+	            bufferedwriter.flush();
+	        }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void readSocket(SSLSocket sslsocket){
+		InputStream inputStreamClient;
+		BufferedReader bufferedreader = null;
+		try {
+			inputStreamClient = sslsocket.getInputStream();
+	        InputStreamReader inputStreamReaderClient = new InputStreamReader(inputStreamClient);
+	        bufferedreader = new BufferedReader(inputStreamReaderClient);
+	        String string = null;
+            while ((string = bufferedreader.readLine()) != null) {
+                System.out.println(string);
+                System.out.flush();
+            }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+    public
+            static
+    void
+            main(String[] arstring) {
+        try {
+            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 9999);
+            
+            readConsole(sslsocket);
+            readSocket(sslsocket);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+}    

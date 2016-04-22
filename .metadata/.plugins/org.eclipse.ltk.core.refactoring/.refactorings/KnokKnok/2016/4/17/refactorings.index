@@ -1,0 +1,9 @@
+1461276663490	Delete element
+1461336240096	Extract method 'readSocket'
+1461336317152	Extract method 'sendData'
+1461337360603	Extract method 'writeToConsole'
+1461337420691	Extract method 'createServerSocket'
+1461337725212	Extract method 'readClientData'
+1461337838969	Extract method 'sendDataToServer'
+1461337928006	Extract method 'createClientSocket'
+1461338333598	Extract method 'readFromConsole'

@@ -1,0 +1,33 @@
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.Socket;
+
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.trustStore;
+
+public class KnockKnockServer {
+  public static void main(String args[]) throws Exception {
+	  System.out.println(System.getProperty("javax.net.ssl.trustStore" ));
+    System.setProperty("javax.net.ssl.trustStore", "clienttrust");
+    SSLSocketFactory ssf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+    Socket s = ssf.createSocket("localhost", 4444);
+
+    OutputStream outs = s.getOutputStream();
+    PrintStream out = new PrintStream(outs);
+    InputStream ins = s.getInputStream();
+    BufferedReader in = new BufferedReader(new InputStreamReader(ins));
+
+    out.println("Hi,How are u!");
+    out.println("");
+    String line = null;
+    while ((line = in.readLine()) != null) {
+      System.out.println(line);
+    }
+
+    in.close();
+    out.close();
+  }
+}

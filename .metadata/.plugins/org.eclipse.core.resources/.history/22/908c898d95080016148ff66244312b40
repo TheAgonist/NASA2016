@@ -1,0 +1,55 @@
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+public
+class KnockKnockServer {
+	
+	private BufferedReader readConsole(){
+		InputStream inputStreamConsole = System.in;
+        InputStreamReader inputStreamReaderConsole = new InputStreamReader(inputStreamConsole);
+        BufferedReader bufferedReaderConsole = new BufferedReader(inputStreamReaderConsole);
+        return bufferedReaderConsole;
+	}
+	
+	private BufferedReader readSocket(SSLSocket sslsocket){
+		InputStream inputStreamClient;
+		try {
+			inputStreamClient = sslsocket.getInputStream();
+	        InputStreamReader inputStreamReaderClient = new InputStreamReader(inputStreamClient);
+	        BufferedReader bufferedreader = new BufferedReader(inputStreamReaderClient);
+	        return bufferedreader;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+    public static void main(String[] arstring) {
+        try {
+            SSLServerSocketFactory sslserversocketfactory =
+                    (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
+            SSLServerSocket sslserversocket =
+                    (SSLServerSocket) sslserversocketfactory.createServerSocket(9999);
+            SSLSocket sslsocket = (SSLSocket) sslserversocket.accept();
+
+            
+            readConsole();
+            readSocket(sslsocket);
+
+            String string = null;
+            while ((string = bufferedreader.readLine()) != null) {
+                System.out.println(string);
+                System.out.flush();
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+}
