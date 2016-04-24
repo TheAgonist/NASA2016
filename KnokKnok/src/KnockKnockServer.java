@@ -55,7 +55,7 @@ public class KnockKnockServer {
                 new InputStreamReader(clientSocket.getInputStream()));
         ) {
         
-            String inputLine, outputLine;
+            String inputLine = null, outputLine;
             String obst[] = inputLine.split(";");
             for(int i = 1; i < obst.length; i++){
             	String[] koo = obst[i].split(",");
@@ -72,7 +72,6 @@ public class KnockKnockServer {
             		}
             	}
             }
-            for(int i = 0; i < n; i++)
             /*int[][] graph ={  0 1 2 3 4 5 6 7
             				0{0,0,0,0,0,0,0,0},
 		            		1{0,0,3,0,4,0,0,0},
@@ -82,10 +81,9 @@ public class KnockKnockServer {
 		            		5{0,0,0,2,43,0,0,9},
 		            		6{0,0,6,0,0,0,0,8},
 		            		7{0,0,0,5,0,9,8,0}};*/
-            DijkstraClass dj = new DijkstraClass();
-            int[] ans = dj.Dijkstra(graph, 3, 7);
-            for(int i = 0; i < ans.length; i++){
-            	System.out.print(ans[i]+" ");
+            int ans[] = dij.Dijkstra(graph, 3, 7);
+            for(int j = 0; j < ans.length; j++){
+            	System.out.print(ans[j]+" ");
             }
             KnockKnockProtocol kkp = new KnockKnockProtocol();
             outputLine = kkp.processInput(null);
