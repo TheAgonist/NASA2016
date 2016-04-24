@@ -33,8 +33,12 @@ import java.net.*;
 import java.io.*;
 
 public class KnockKnockServer {
+	public static final int n = 250;
+	public static final float obstacle = 0.5f; 
     public static void main(String[] args) throws IOException {
-        
+    int node = 0;
+    DijkstraClass dij = new DijkstraClass(); 
+    float[][] treshhold = new float[n][n];
         if (args.length != 1) {
             System.err.println("Usage: java KnockKnockServer <port number>");
             System.exit(1);
@@ -52,20 +56,37 @@ public class KnockKnockServer {
         ) {
         
             String inputLine, outputLine;
-            
+            String obst[] = inputLine.split(";");
+            for(int i = 1; i < obst.length; i++){
+            	String[] koo = obst[i].split(",");
+            	treshhold[Integer.parseInt(koo[0])][Integer.parseInt(koo[1])] = obstacle;
+            }
+            int[][] graph = new int[250][250];
             // Initiate conversation with client
-            System.out.println("ccc");
-            int[][] graph ={  //0 1 2 3 4 5 6 7
-            				{0,0,0,0,0,0,0,0},
-		            		{0,0,3,0,4,0,0,0},
-		            		{0,3,0,1,0,0,6,0},
-		            		{0,0,1,0,0,2,0,5},
-		            		{0,4,0,0,0,43,0,0},
-		            		{0,0,0,2,43,0,0,9},
-		            		{0,0,6,0,0,0,0,8},
-		            		{0,0,0,5,0,9,8,0}};
+            //System.out.println("ccc");
+            for(int i = 0; i <= n; i++){
+            	for(int j = 0; j <= n; j++){
+            		if(treshhold[i][j] >= obstacle){
+            			node++;
+            			dij.Dijkstra(graph,node,250);
+            		}
+            	}
+            }
+            for(int i = 0; i < n; i++)
+            /*int[][] graph ={  0 1 2 3 4 5 6 7
+            				0{0,0,0,0,0,0,0,0},
+		            		1{0,0,3,0,4,0,0,0},
+		            		2{0,3,0,1,0,0,6,0},
+		            		3{0,0,1,0,0,2,0,5},
+		            		4{0,4,0,0,0,43,0,0},
+		            		5{0,0,0,2,43,0,0,9},
+		            		6{0,0,6,0,0,0,0,8},
+		            		7{0,0,0,5,0,9,8,0}};*/
             DijkstraClass dj = new DijkstraClass();
-            System.out.println(dj.Dijkstra(graph, 3, 7));
+            int[] ans = dj.Dijkstra(graph, 3, 7);
+            for(int i = 0; i < ans.length; i++){
+            	System.out.print(ans[i]+" ");
+            }
             KnockKnockProtocol kkp = new KnockKnockProtocol();
             outputLine = kkp.processInput(null);
             out.println(outputLine);
